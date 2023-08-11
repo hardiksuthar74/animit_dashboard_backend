@@ -18,7 +18,7 @@ const sendErrorDev = (err: AppError, res: Response) => {
 };
 
 const globalErrorHandler = (
-  err: AppError,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
