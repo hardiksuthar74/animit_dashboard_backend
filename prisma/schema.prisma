@@ -18,3 +18,26 @@ model User {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
 }
+
+model Anime {
+  id        Int     @id @default(autoincrement())
+  title     String
+  synopsis  String
+  season    String
+  year      Int
+  episodes  Int
+  image     String
+  status    String
+  type      String
+  score     Int
+  popular   Int
+  favorites Int
+  genres    Genre[]
+}
+
+model Genre {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
+  Anime   Anime? @relation(fields: [animeId], references: [id])
+  animeId Int?
+}

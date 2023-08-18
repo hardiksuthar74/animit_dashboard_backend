@@ -6,19 +6,19 @@ const sendErrorDev = (err: AppError, res: Response) => {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
-      error: err,
+      error: err.errorData,
     });
   } else {
     res.status(500).json({
       status: "error",
       message: "Something went wrong!",
-      error: err,
+      error: err.errorData,
     });
   }
 };
 
 const globalErrorHandler = (
-  err: any,
+  err: AppError,
   req: Request,
   res: Response,
   next: NextFunction
