@@ -12,3 +12,21 @@ if (!global.__db) {
 db = global.__db;
 
 export { db };
+
+// class Database {
+//   private prisma: PrismaClient;
+//   private static instance: Database;
+
+//   private constructor() {
+//     this.prisma = new PrismaClient();
+//   }
+
+//   static getInstance() {
+//     if (!Database.instance) {
+//       Database.instance = new Database();
+//     }
+//     return Database.instance;
+//   }
+// }
+
+// export { Database };
