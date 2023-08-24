@@ -10,6 +10,7 @@ import {
 } from "../utils/authHelper";
 import Validator from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
+import { UserFacade } from "../services/UserRepository";
 // import { UserRepository } from "../services/UserRepository";
 
 interface User {
@@ -61,83 +62,33 @@ export const getAllUser = catchAsync(
 
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { name, email, password, confirmPassword } = req.body;
+    const userFacade = new UserFacade();
 
-    const validator = new Validator(req.body);
+    const userData = await userFacade.createUser(req.body);
 
-    validator
-      .isRequired("name")
-      .isRequired("email")
-      .isRequired("password")
-      .isRequired("confirmPassword")
-      .isEmail("password");
+    const user: User = {
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+    };
 
-    if (validator.isValid()) {
-      const sameUser = await db.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
-
-      if (sameUser) return next(new AppError("Email already in use", 400));
-
-      const userData = await db.user.create({
-        data: {
-          name: name,
-          email: email,
-          password: hashPassword(password),
-        },
-      });
-
-      const user: User = {
-        id: userData.id,
-        name: userData.name,
-        email: userData.email,
-      };
-
-      createSendToken(user, 201, req, res);
-    } else {
-      const errors: Record<string, string> = validator.getErrors();
-      return next(new AppError("form error", 404, errors));
-    }
+    createSendToken(user, 201, req, res);
   }
 );
 
 export const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { email, password } = req.body;
+    const userFacade = new UserFacade();
 
-    const validator = new Validator(req.body);
+    const userData = await userFacade.loginUser(req.body);
 
-    validator.isRequired("email").isRequired("password").isEmail("email");
+    const user = {
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+    };
 
-    if (validator.isValid()) {
-      const userData = await db.user.findUnique({
-        where: {
-          email: email,
-        },
-      });
-
-      const canLogin: boolean = await verifyPassword(
-        password,
-        userData.password
-      );
-
-      if (!canLogin) {
-        return next(new AppError("Email or Password Incorrect", 401));
-      }
-
-      const user = {
-        id: userData.id,
-        name: userData.name,
-        email: userData.email,
-      };
-
-      createSendToken(user, 201, req, res);
-    } else {
-      const errors: Record<string, string> = validator.getErrors();
-      return next(new AppError("form error", 404, errors));
-    }
+    createSendToken(user, 201, req, res);
   }
 );
 
@@ -190,5 +141,17 @@ export const getCurrentUser = catchAsync(
     } catch (error) {
       return next(new AppError("Invalid Token", 400));
     }
+  }
+);
+
+export const tryMethod = catchAsync(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const userFacade = new UserFacade();
+
+    const data = await userFacade.createUser(req.body);
+
+    res.status(200).json({
+      data: data,
+    });
   }
 );
