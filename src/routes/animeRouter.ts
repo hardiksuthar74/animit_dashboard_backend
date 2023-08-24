@@ -1,9 +1,13 @@
 import express, { Router } from "express";
 
-import { getSearchedAnime } from "../controllers/animeController";
+import {
+  getSearchedAnime,
+  getSingleAnime,
+} from "../controllers/animeController";
 
 const animeRouter: Router = express.Router();
 
 animeRouter.post("/search", getSearchedAnime);
+animeRouter.post("/singleanime", getSingleAnime);
 
 export default animeRouter;

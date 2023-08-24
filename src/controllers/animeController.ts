@@ -19,3 +19,20 @@ export const getSearchedAnime = async (
     data: searchedData,
   });
 };
+
+export const getSingleAnime = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const animeData = new AnimeData();
+
+  const { animeid } = req.body;
+
+  const searchedData = await animeData.fetchSingleAnime(animeid);
+
+  res.status(200).json({
+    status: "success",
+    data: searchedData,
+  });
+};
