@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./middlewares/errorHandler";
 import userRouter from "./routes/userRouter";
+import animeRouter from "./routes/animeRouter";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/users", userRouter);
+app.use("/animes", animeRouter);
 
 app.all("*", (req: Request, res: Response, next: NextFunction): void => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
