@@ -20,25 +20,6 @@ model anime {
   score     Int?
   popular   Int?
   favorites Int?
-  cover     cover[]
-  genre     genre[]
-}
-
-model cover {
-  id      Int    @id @default(autoincrement())
-  animeId Int?
-  anime   anime? @relation(fields: [animeId], references: [id], map: "Cover_animeId_fkey")
-
-  @@index([animeId], map: "Cover_animeId_fkey")
-}
-
-model genre {
-  id      Int    @id @default(autoincrement())
-  name    String @unique(map: "Genre_name_key")
-  animeId Int?
-  anime   anime? @relation(fields: [animeId], references: [id], map: "Genre_animeId_fkey")
-
-  @@index([animeId], map: "Genre_animeId_fkey")
 }
 
 model user {
@@ -47,5 +28,5 @@ model user {
   name      String?
   password  String
   createdAt DateTime @default(now())
-  updateAt  DateTime
+  updateAt  DateTime @updatedAt
 }

@@ -98,7 +98,6 @@ class UserDb {
     const user = await db.user.create({
       data: body,
     });
-
     return user;
   }
 

@@ -36,3 +36,21 @@ export const getSingleAnime = async (
     data: searchedData,
   });
 };
+
+export const insertSingleAnime = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const animeData = new AnimeData();
+
+  // console.log(req.body);
+  // return;
+
+  const insertAnime = await animeData.insertAnimeData(req.body);
+
+  res.status(200).json({
+    status: "success",
+    data: insertAnime,
+  });
+};
