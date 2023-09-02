@@ -8,18 +8,19 @@ datasource db {
 }
 
 model anime {
-  id        Int     @id @default(autoincrement())
-  title     String?
-  synopsis  String? @db.Text
-  season    String?
-  year      Int?
-  episodes  Int?
-  image     String?
-  status    String?
-  type      String?
-  score     Int?
-  popular   Int?
-  favorites Int?
+  id          Int           @id @default(autoincrement())
+  title       String?
+  synopsis    String?       @db.Text
+  season      String?
+  year        Int?
+  episodes    Int?
+  image       String?
+  status      String?
+  type        String?
+  score       Int?
+  popular     Int?
+  favorites   Int?
+  animeGenres animeGenres[]
 }
 
 model user {
@@ -29,4 +30,27 @@ model user {
   password  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
+}
+
+model spotlight {
+  id         Int    @id @default(autoincrement())
+  coverImage String
+  rank       Int
+  type       String
+  date       String
+  synopsis   String @db.Text
+}
+
+model genres {
+  id          Int           @id @default(autoincrement())
+  genres      String
+  animeGenres animeGenres[]
+}
+
+model animeGenres {
+  id       Int     @id @default(autoincrement())
+  genres   genres? @relation(fields: [genresId], references: [id])
+  genresId Int?
+  anime    anime?  @relation(fields: [animeId], references: [id])
+  animeId  Int?
 }
