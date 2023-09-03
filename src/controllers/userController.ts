@@ -10,7 +10,7 @@ import {
 } from "../utils/authHelper";
 import Validator from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
-import { UserFacade } from "../services/UserRepository";
+import { UserFacade } from "../services/UserService";
 // import { UserRepository } from "../services/UserRepository";
 
 interface User {

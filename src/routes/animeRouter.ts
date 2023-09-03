@@ -1,15 +1,10 @@
 import express, { Router } from "express";
 
-import {
-  getSearchedAnime,
-  getSingleAnime,
-  insertSingleAnime,
-} from "../controllers/animeController";
+import { testRoutes } from "../controllers/animeController";
+import { isUserHardik } from "../middlewares/isUserHardik";
 
 const animeRouter: Router = express.Router();
 
-animeRouter.post("/search", getSearchedAnime);
-animeRouter.post("/singleanime", getSingleAnime);
-animeRouter.post("/insertAnime", insertSingleAnime);
+animeRouter.get("/", isUserHardik, testRoutes);
 
 export default animeRouter;

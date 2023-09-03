@@ -1,0 +1,56 @@
+import { NextFunction, Request, Response } from "express";
+import { AnimeData } from "../services/JikanService";
+
+export const getSearchedAnime = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const animeData = new AnimeData();
+
+  const { anime } = req.body;
+
+  //   console.log(req.body);
+
+  const searchedData = await animeData.fetchJikanData(anime);
+
+  res.status(200).json({
+    status: "success",
+    data: searchedData,
+  });
+};
+
+export const getSingleAnime = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const animeData = new AnimeData();
+
+  const { animeid } = req.body;
+
+  const searchedData = await animeData.fetchSingleAnime(animeid);
+
+  res.status(200).json({
+    status: "success",
+    data: searchedData,
+  });
+};
+
+export const insertSingleAnime = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const animeData = new AnimeData();
+
+  // console.log(req.body);
+  // return;
+
+  const insertAnime = await animeData.insertAnimeData(req.body);
+
+  res.status(200).json({
+    status: "success",
+    data: insertAnime,
+  });
+};
