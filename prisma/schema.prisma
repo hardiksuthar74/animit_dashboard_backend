@@ -20,16 +20,17 @@ model anime {
   score       Int?
   popular     Int?
   favorites   Int?
-  animeGenres animeGenres[]
+  animegenres animegenres[]
 }
 
 model user {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique(map: "User_email_key")
+  id        Int       @id @default(autoincrement())
+  email     String    @unique(map: "User_email_key")
   name      String?
   password  String
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  process   process[]
 }
 
 model spotlight {
@@ -44,13 +45,27 @@ model spotlight {
 model genres {
   id          Int           @id @default(autoincrement())
   genres      String
-  animeGenres animeGenres[]
+  animegenres animegenres[]
 }
 
-model animeGenres {
+model animegenres {
   id       Int     @id @default(autoincrement())
-  genres   genres? @relation(fields: [genresId], references: [id])
   genresId Int?
-  anime    anime?  @relation(fields: [animeId], references: [id])
   animeId  Int?
+  anime    anime?  @relation(fields: [animeId], references: [id], map: "animeGenres_animeId_fkey")
+  genres   genres? @relation(fields: [genresId], references: [id], map: "animeGenres_genresId_fkey")
+
+  @@index([animeId], map: "animeGenres_animeId_fkey")
+  @@index([genresId], map: "animeGenres_genresId_fkey")
+}
+
+model process {
+  id       Int   @id @default(autoincrement())
+  animeId  Int?
+  userId   Int?
+  process  Int   @default(0)
+  episodes Int   @default(0)
+  user     user? @relation(fields: [userId], references: [id], map: "Process_userId_fkey")
+
+  @@index([userId], map: "Process_userId_fkey")
 }

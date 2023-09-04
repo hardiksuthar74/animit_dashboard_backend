@@ -2,16 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { db } from "../database/db.server";
 import AppError from "../utils/appError";
-
-import {
-  isValidEmail,
-  hashPassword,
-  verifyPassword,
-} from "../utils/authHelper";
-import Validator from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import { UserFacade } from "../services/UserService";
-// import { UserRepository } from "../services/UserRepository";
 
 interface User {
   id: number;
