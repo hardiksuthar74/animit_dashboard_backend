@@ -99,6 +99,87 @@ class AnimeData {
       data,
     });
   }
-}
 
+  async setDataInOrder(data: any) {
+    const dataToSend = data.map((anime: any) => {
+      return {
+        mal_id: anime.mal_id,
+        title: anime.title,
+        image: anime.images.webp.large_image_url,
+        type: anime.type,
+        episodes: anime.episodes,
+        status: anime.status,
+        score: anime.score,
+        popular: anime.popularity,
+        season: anime.season,
+        year: anime.year,
+        synopsis: anime.synopsis,
+      };
+    });
+
+    return dataToSend;
+  }
+
+  async getAllAnime(query: any) {
+    let url = "https://api.jikan.moe/v4/anime?";
+
+    if (query["page"]) {
+      url = `${url}&page=${query["page"]}`;
+    }
+
+    if (query["limit"]) {
+      url = `${url}&limit=${query["limit"]}`;
+    }
+
+    if (query["genres"]) {
+      url = `${url}&genres=${query["genres"]}`;
+    }
+
+    if (query["q"]) {
+      url = `${url}&q=${query["q"]}`;
+    }
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const anime = await this.setDataInOrder(data?.data);
+
+    return anime;
+  }
+
+  async getTrendingAnime() {
+    let url =
+      "https://api.jikan.moe/v4/top/anime?limit=10&type=tv&filter=airing";
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const anime = await this.setDataInOrder(data?.data);
+
+    return anime;
+  }
+
+  async getFavouritestAnime() {
+    let url =
+      "https://api.jikan.moe/v4/top/anime?limit=10&type=tv&filter=favorite";
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const anime = await this.setDataInOrder(data?.data);
+
+    return anime;
+  }
+
+  async getAnimeByGenre(query) {
+    let url = `https://api.jikan.moe/v4/anime?genres=${query["genre"]}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const anime = await this.setDataInOrder(data?.data);
+
+    return anime;
+  }
+}
 export { AnimeData };
