@@ -160,15 +160,11 @@ class AnimeData {
   }
 
   async getFavouritestAnime() {
-    let url =
-      "https://api.jikan.moe/v4/top/anime?limit=10&type=tv&filter=favorite";
+    const data = await db.anime.findMany();
 
-    const response = await fetch(url);
-    const data = await response.json();
+    // const anime = await this.setDataInOrder(data);
 
-    const anime = await this.setDataInOrder(data?.data);
-
-    return anime;
+    return data;
   }
 
   async getAnimeByGenre(query) {

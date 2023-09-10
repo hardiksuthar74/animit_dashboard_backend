@@ -12,6 +12,11 @@ export class Anime {
   public popular: number;
   public favorites: number;
 
+  setId(id: string) {
+    this.id = parseInt(id);
+    return this;
+  }
+
   setTitle(title: string) {
     this.title = title;
     return this;
