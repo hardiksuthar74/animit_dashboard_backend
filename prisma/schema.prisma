@@ -7,22 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model anime {
-  id          Int           @id @default(autoincrement())
-  title       String?
-  synopsis    String?       @db.Text
-  season      String?
-  year        Int?
-  episodes    Int?
-  image       String?
-  status      String?
-  type        String?
-  score       Int?
-  popular     Int?
-  favorites   Int?
-  animegenres animegenres[]
-}
-
 model user {
   id        Int       @id @default(autoincrement())
   email     String    @unique(map: "User_email_key")
@@ -33,39 +17,35 @@ model user {
   process   process[]
 }
 
+model anime {
+  id           Int     @id @default(autoincrement())
+  jikanAnimeId Int?
+  title        String?
+  image        String?
+  type         String?
+  episodes     Int?
+  status       String?
+  score        Int?
+  popular      Int?
+  season       String?
+  year         Int?
+  synopsis     String? @db.Text
+}
+
 model spotlight {
-  id         Int    @id @default(autoincrement())
-  coverImage String
-  rank       Int
-  type       String
-  date       String
-  synopsis   String @db.Text
-}
-
-model genres {
-  id          Int           @id @default(autoincrement())
-  genres      String
-  animegenres animegenres[]
-}
-
-model animegenres {
-  id       Int     @id @default(autoincrement())
-  genresId Int?
-  animeId  Int?
-  anime    anime?  @relation(fields: [animeId], references: [id], map: "animeGenres_animeId_fkey")
-  genres   genres? @relation(fields: [genresId], references: [id], map: "animeGenres_genresId_fkey")
-
-  @@index([animeId], map: "animeGenres_animeId_fkey")
-  @@index([genresId], map: "animeGenres_genresId_fkey")
+  id           Int     @id @default(autoincrement())
+  coverImage   String?
+  rank         Int?
+  jikanAnimeId Int?
 }
 
 model process {
-  id       Int   @id @default(autoincrement())
-  animeId  Int?
-  userId   Int?
-  process  Int   @default(0)
-  episodes Int   @default(0)
-  user     user? @relation(fields: [userId], references: [id], map: "Process_userId_fkey")
+  id           Int   @id @default(autoincrement())
+  userId       Int?
+  process      Int   @default(0)
+  episodes     Int   @default(0)
+  jikanAnimeId Int?
+  user         user? @relation(fields: [userId], references: [id], map: "Process_userId_fkey")
 
   @@index([userId], map: "Process_userId_fkey")
 }

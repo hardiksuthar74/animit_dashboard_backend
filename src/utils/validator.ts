@@ -11,7 +11,7 @@ class Validator {
   }
 
   isRequired(field: string, message = `${field} field is required`): this {
-    if (!this.data[field] || this.data[field].trim() === "") {
+    if (!this.data[field]) {
       this.errors[field] = message;
     }
     return this;

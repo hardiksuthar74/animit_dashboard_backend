@@ -2,22 +2,31 @@ import express, { Router } from "express";
 import multer from "multer";
 
 import {
-  deleteAnime,
-  getAllAnime,
-  getSpotlightAnime,
-  getTrendingAnime,
-  addAnime,
+  addSpotlightAnime,
+  getAllAnimes,
+  getAllSpotLightAnime,
+  getAnimeByID,
+  getAnimeRecommendations,
   uploadAnimeImage,
-  updateAnime,
+  validateFields,
 } from "../controllers/animeController";
 
 const animeRouter: Router = express.Router();
 
-animeRouter.get("/", getAllAnime);
-animeRouter.post("/", uploadAnimeImage, addAnime);
-animeRouter.post("/update", uploadAnimeImage, updateAnime);
-animeRouter.post("/delete", deleteAnime);
-animeRouter.get("/favourites", getSpotlightAnime);
-animeRouter.get("/trending", getTrendingAnime);
+animeRouter.get("/spotlight", getAllSpotLightAnime);
+animeRouter.get("/", getAllAnimes);
+animeRouter.get("/:animeId", getAnimeByID);
+animeRouter.get("/:animeId/recommendations", getAnimeRecommendations);
+animeRouter.post(
+  "/spotlight",
+  uploadAnimeImage,
+  validateFields,
+  addSpotlightAnime
+);
+// animeRouter.post("/", uploadAnimeImage, addAnime);
+// animeRouter.post("/update", uploadAnimeImage, updateAnime);
+// animeRouter.post("/delete", deleteAnime);
+// animeRouter.get("/favourites", getSpotlightAnime);
+// animeRouter.get("/trending", getTrendingAnime);
 
 export default animeRouter;
