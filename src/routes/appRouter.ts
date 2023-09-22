@@ -1,17 +1,18 @@
-// import express, { Router } from "express";
+import express, { Router } from "express";
 
-// import {
-//   addAnime,
-//   addEpisodes,
-//   testRoute,
-//   updateProcess,
-// } from "../controllers/appController";
+import {
+  addAnimeUser,
+  addEpisodes,
+  testRoute,
+  updateProcess,
+} from "../controllers/appController";
+import { addAnime } from "../middlewares/addAnime";
 
-// const appRouter: Router = express.Router();
+const appRouter: Router = express.Router();
 
-// appRouter.get("/test", testRoute);
-// appRouter.post("/addAnime", addAnime);
-// appRouter.post("/updateProcess", updateProcess);
+appRouter.get("/test", testRoute);
+appRouter.post("/addAnime", addAnime, addAnimeUser);
+appRouter.post("/updateProcess", updateProcess);
 // appRouter.post("/addEpisodes", addEpisodes);
 
-// export default appRouter;
+export default appRouter;

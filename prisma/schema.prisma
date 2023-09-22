@@ -42,7 +42,7 @@ model spotlight {
 model process {
   id           Int   @id @default(autoincrement())
   userId       Int?
-  process      Int   @default(0)
+  process      Int   @default(3)
   episodes     Int   @default(0)
   jikanAnimeId Int?
   user         user? @relation(fields: [userId], references: [id], map: "Process_userId_fkey")

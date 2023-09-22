@@ -7,14 +7,12 @@ const sendErrorDev = (err: AppError, res: Response) => {
       status: err.status,
       message: err.message,
       error: err.errorData,
-      err: err,
     });
   } else {
     res.status(500).json({
       status: "error",
       message: "Something went wrong!",
       error: err.errorData,
-      err: err,
     });
   }
 };

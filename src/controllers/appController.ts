@@ -1,78 +1,77 @@
-// import { Request, Response } from "express";
-// import catchAsync from "../utils/catchAsync";
-// import { AppService } from "../services/AppService";
+import { NextFunction, Request, Response } from "express";
+import catchAsync from "../utils/catchAsync";
+import { AppService } from "../services/AppService";
+import { db } from "../database/db.server";
+import Validator from "../utils/validator";
+import AppError from "../utils/appError";
 
-// export const testRoute = catchAsync(
-//   async (req: Request, res: Response): Promise<void> => {
-//     const userid = req["userId"];
+export const testRoute = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userid = req["userId"];
 
-//     res.status(200).json({
-//       status: "success",
-//       userId: userid,
-//     });
-//   }
-// );
+    res.status(200).json({
+      status: "success",
+      userId: userid,
+    });
+  }
+);
 
-// export const addAnime = catchAsync(
-//   async (req: Request, res: Response): Promise<void> => {
-//     const userid = req["userId"];
+export const addAnimeUser = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userid = req["userId"];
 
-//     const appService = new AppService(userid);
+    const appService = new AppService(userid);
 
-//     const data = await appService.addAnimeMethod(req.body);
+    const data = await appService.addAnimeMethod(req.body);
 
-//     let processMsg = "";
+    res.status(200).json({
+      status: "success",
+      message: `This anime has been added`,
+      data: data,
+    });
+  }
+);
 
-//     if (data.process == 0) processMsg = "WatchList";
-//     if (data.process == 1) processMsg = "Hold";
-//     if (data.process == 2) processMsg = "Plan to watch";
-//     if (data.process == 3) processMsg = "Dropped";
-//     if (data.process == 4) processMsg = "Completed";
+export const updateProcess = catchAsync(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    console.log(req.body);
+    const userid = req["userId"];
 
-//     res.status(200).json({
-//       status: "success",
-//       message: `This anime has been added to ${processMsg}`,
-//       data: data,
-//     });
-//   }
-// );
+    const validator = new Validator();
+    validator.setData(req.body);
 
-// export const updateProcess = catchAsync(
-//   async (req: Request, res: Response): Promise<void> => {
-//     const userid = req["userId"];
+    validator.isRequired("process");
+    validator.isRequired("id");
+    validator.isRequired("episodes");
 
-//     const appService = new AppService(userid);
+    if (!validator.isValid()) {
+      return next(new AppError("form error", 400, validator.getErrors()));
+    }
 
-//     const data = await appService.updateProcessStatus(req.body);
+    const appService = new AppService(userid);
 
-//     let processMsg = "";
+    const data = await appService.updateProcessStatus(req.body);
 
-//     if (data.process == 0) processMsg = "WatchList";
-//     if (data.process == 1) processMsg = "Hold";
-//     if (data.process == 2) processMsg = "Plan to watch";
-//     if (data.process == 3) processMsg = "Dropped";
-//     if (data.process == 4) processMsg = "Completed";
+    res.status(200).json({
+      status: "success",
+      message: `This anime has been updated`,
+      data: data,
+    });
+  }
+);
 
-//     res.status(200).json({
-//       status: "success",
-//       message: `This anime has been added to ${processMsg}`,
-//       data: data,
-//     });
-//   }
-// );
+export const addEpisodes = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userid = req["userId"];
 
-// export const addEpisodes = catchAsync(
-//   async (req: Request, res: Response): Promise<void> => {
-//     const userid = req["userId"];
+    const appService = new AppService(userid);
 
-//     const appService = new AppService(userid);
+    const data = await appService.addEpisodes(req.body);
 
-//     const data = await appService.addEpisodes(req.body);
-
-//     res.status(200).json({
-//       status: "success",
-//       message: `Watch more`,
-//       data: data,
-//     });
-//   }
-// );
+    res.status(200).json({
+      status: "success",
+      message: `Watch more`,
+      data: data,
+    });
+  }
+);

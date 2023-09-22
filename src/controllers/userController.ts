@@ -116,6 +116,28 @@ export const getCurrentUser = catchAsync(
           )
         );
       }
+      const allAnimeData = await db.process.findMany({
+        where: { userId: decoded.id },
+      });
+
+      const animeData = [];
+      for (const anime of allAnimeData) {
+        const animeSpotData = await db.anime.findFirst({
+          where: { jikanAnimeId: anime.jikanAnimeId },
+        });
+
+        const dataToPush = {
+          id: anime.id,
+          jikanAnimeId: animeSpotData.jikanAnimeId,
+          title: animeSpotData.title,
+          episodes: animeSpotData.episodes,
+          image: animeSpotData.image,
+          userEpisode: anime.episodes,
+          userAnimeStatus: anime.process,
+        };
+
+        animeData.push(dataToPush);
+      }
 
       const user = {
         id: userData.id,
@@ -128,6 +150,7 @@ export const getCurrentUser = catchAsync(
         isLogin: true,
         data: {
           ...user,
+          animeData: animeData,
         },
       });
     } catch (error) {
